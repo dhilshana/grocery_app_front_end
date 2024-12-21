@@ -1,0 +1,39 @@
+name: grocery_app
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_screenutil: ^5.9.3
+  http: ^1.2.2
+  provider: ^6.1.2
+  shared_preferences: ^2.3.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Ge ist
+      fonts: 
+        - asset: assets/fonts/Geist-Black.ttf
+        - asset: assets/fonts/Geist-Bold.ttf
+        - asset: assets/fonts/Geist-ExtraBold.ttf
+        - asset: assets/fonts/Geist-ExtraLight.ttf
+        - asset: assets/fonts/Geist-Light.ttf
+        - asset: assets/fonts/Geist-Medium.ttf
+        - asset: assets/fonts/Geist-Regular.ttf
+        - asset: assets/fonts/Geist-SemiBold.ttf
+        - asset: assets/fonts/Geist-Thin.ttf
+  assets:
+    - assets/
+    - assets/images/
+    - assets/images/categories/
