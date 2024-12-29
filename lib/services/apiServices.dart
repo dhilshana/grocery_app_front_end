@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:grocery_app/model/cartModel.dart';
 import 'package:grocery_app/model/categoryModel.dart';
 import 'package:grocery_app/model/orderModel.dart';
 import 'package:grocery_app/model/productModel.dart';
+import 'package:grocery_app/model/reviewModel.dart';
 import 'package:grocery_app/model/searchResult.dart';
 import 'package:grocery_app/model/userModel.dart';
 import 'package:grocery_app/model/wishlistModel.dart';
@@ -11,6 +13,7 @@ import 'package:grocery_app/model/addressModel.dart';
 import 'package:grocery_app/utils/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:ui';
 
 
 class ApiServices{
@@ -455,23 +458,77 @@ Future<SearchResult> getSearchedProduct({required String query})async{
   }
 }
 
-Future<Map<String,dynamic>> addReview({required int productId,required int userId, required String description,required int rating})async{
-  String addReviewUrl = '$baseUrl/reviewProduct';
-  try{
-    final response = await http.post(Uri.parse(addReviewUrl),body: {
-      'product_id':productId,
-      'user_id':userId,
-      'description':description,
-      'rating':rating,
-    });
-    if(response.statusCode == 200){
-      return jsonDecode(response.body);
+Future<Map<String, dynamic>> addReview({
+  required int productId,
+  required int userId,
+  required String description,
+  required int rating,
+  required List<File> images,
+}) async {
+  String addReviewUrl = '$baseUrl/reviewproduct';
+
+  try {
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', Uri.parse(addReviewUrl));
+
+    // Add fields
+    request.fields['product_id'] = productId.toString();
+    request.fields['user_id'] = userId.toString();
+    request.fields['description'] = description;
+    request.fields['rating'] = rating.toString();
+
+    // Add images
+    for (var image in images) {
+      request.files.add(
+        await http.MultipartFile.fromPath('image', image.path),
+      );
     }
-    else{
-      return jsonDecode(response.body);
+
+    // Send the request
+    var response = await request.send();
+
+    // Parse the response
+    if (response.statusCode == 200) {
+      var responseBody = await response.stream.bytesToString();
+      return jsonDecode(responseBody);
+    } else {
+      var responseBody = await response.stream.bytesToString();
+      return {'error': jsonDecode(responseBody)};
+    }
+  } catch (e) {
+    return {'error': e.toString()};
+  }
+}
+Future<List<ReviewModel>> getReviews({required int productId}) async{
+  String getReviewsUrl = '$baseUrl/viewreviewbyproductid/$productId';
+
+  try{
+    final response = await http.get(Uri.parse(getReviewsUrl));
+    if(response.statusCode == 200){
+      final fullData = jsonDecode(response.body);
+      final List<ReviewModel> modelsData = (fullData['data'] as List).map((e)=>ReviewModel.fromJson(e)).toList();
+      return modelsData;
+    }else{
+      throw jsonDecode(response.body)['message'];
     }
   }catch(e){
     rethrow;
   }
 }
+Future<List<dynamic>> getReviewImages({required int productId})async{
+  String getReviewsUrl = '$baseUrl/viewreviewbyproductid/$productId';
+   try{
+    final response = await http.get(Uri.parse(getReviewsUrl));
+    if(response.statusCode == 200){
+      final fullData = jsonDecode(response.body);
+      final List<dynamic> modelsData = fullData['images'];
+      return modelsData;
+    }else{
+      throw jsonDecode(response.body)['message'];
+    }
+  }catch(e){
+    rethrow;
+  }
+}
+  
 }

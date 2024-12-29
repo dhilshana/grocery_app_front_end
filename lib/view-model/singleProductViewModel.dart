@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/productModel.dart';
+import 'package:grocery_app/model/reviewModel.dart';
 import 'package:grocery_app/services/apiServices.dart';
 
 class SingleProductViewModel extends ChangeNotifier{
@@ -13,6 +14,7 @@ class SingleProductViewModel extends ChangeNotifier{
   bool isLoading = false;
   bool addToCartLoading = false;
   bool viewReviewLoading = false;
+  List<ReviewModel> reviews = [];
 
 
 
@@ -105,20 +107,21 @@ void decrement({required double fixedprice,required double fixedquatity,required
     }
   }
 
-  void addReviewUiHandler(BuildContext context,{required int productId, required String description, required int rating})async{
-    try{
+  void viewReviewUiHandler({required int productId,required BuildContext context})async{
+    reviews = [];
+    notifyListeners();
+    try {
       viewReviewLoading = true;
+      reviews = await apiServices.getReviews(productId: productId);
       notifyListeners();
-      userId = await apiServices.getId();
-      final result = await apiServices.addReview(productId: productId, userId: userId??0, description: description, rating: rating);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result['message'])));
-    }
-    catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-    }finally{
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    } finally {
       viewReviewLoading = false;
       notifyListeners();
     }
+  
   }
 
 }

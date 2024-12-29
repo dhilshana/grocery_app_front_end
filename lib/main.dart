@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grocery_app/services/authCheck.dart';
 import 'package:grocery_app/view-model/accountScreenViewModel.dart';
 import 'package:grocery_app/view-model/addAddressViewModel.dart';
+import 'package:grocery_app/view-model/addReviewViewModel.dart';
 import 'package:grocery_app/view-model/addressViewModel.dart';
 import 'package:grocery_app/view-model/cartViewModel.dart';
 import 'package:grocery_app/view-model/categoryScreenViewModel.dart';
@@ -13,6 +14,7 @@ import 'package:grocery_app/view-model/loginViewModel.dart';
 import 'package:grocery_app/view-model/orderScreenViewModel.dart';
 import 'package:grocery_app/view-model/profileViewModel.dart';
 import 'package:grocery_app/view-model/registerViewModel.dart';
+import 'package:grocery_app/view-model/reviewGalleryViewModel.dart';
 import 'package:grocery_app/view-model/singleProductViewModel.dart';
 import 'package:grocery_app/view-model/userHomeViewModel.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +36,8 @@ void main() {
       ChangeNotifierProvider(create: (context)=>AddAddressViewModel()),
       ChangeNotifierProvider(create: (context)=>EditAddressViewModel()),
       ChangeNotifierProvider(create: (context)=>CategoryScreenViewModel()),
+      ChangeNotifierProvider(create: (context)=>AddReviewViewModel()),
+      ChangeNotifierProvider(create: (context)=>ReviewGalleryViewModel()),
     ],
     child: const MainApp()));
 }
