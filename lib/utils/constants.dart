@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-String baseUrl = 'https://835b-2402-3a80-44a0-a68b-194b-319d-3cc9-5421.ngrok-free.app';
+String baseUrl = 'https://5a75-117-243-136-23.ngrok-free.app';
 
 const kGreenColor = Colors.green;
 const kWhiteColor = Colors.white;
